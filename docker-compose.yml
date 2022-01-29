@@ -1,0 +1,12 @@
+version: '1.0.0'
+
+services:
+  movieapi:
+    build: 
+      context: .
+    ports:
+      - "1985:8000"
+    volumes:
+      - ./app:/app
+    command: >
+     sh -C "python manage.py runserver 0.0.0.0:8000"
