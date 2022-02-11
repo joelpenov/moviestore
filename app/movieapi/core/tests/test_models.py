@@ -1,6 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from core import models
 
+def get_sample_user(email="some@name.com", password="mypasswrod4"):
+    return get_user_model().objects.create_user(email=email, password=password)
 
 class TestModels(TestCase):
     def test_the_user_is_created_successfully_using_email(self, **args):
@@ -33,3 +36,31 @@ class TestModels(TestCase):
 
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
+    
+    def test_tag_str(self):
+        tag = models.Tag.objects.create(
+            name="Netflix",
+            user=get_sample_user()
+        )
+
+        self.assertEqual(str(tag), tag.name)
+    
+    def test_actor_str(self):
+        actor = models.Actor.objects.create(
+            name= "Eugenio",
+            last_name="Derbez",
+            user= get_sample_user()
+        )
+
+        self.assertEqual(str(actor), f"{actor.name} {actor.last_name}")
+    
+    def test_str_movie_model(self):
+
+        movie = models.Movie.objects.create(
+            title= "La vita è bella",
+            release_date = "1999-02-21",
+            running_time = 116,
+            user = get_sample_user()
+        )
+
+        self.assertEqual(str(movie), f"{movie.title} ({str(movie.release_date)}: {str(movie.running_time)} minutes)")
